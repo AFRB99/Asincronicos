@@ -10,13 +10,13 @@ int menu(void);
 int main()
 {
     menu();
-    return 0;
+    return 0; 
 }
 
 int menu()
 {
     int num;
-    PRANKING RANKING = NULL;
+    PRANKING ranking = NULL;
     while(1){
         printf("\n\t\tHola!, bienvenido al juego del ahorcado\n");  
         printf("\n\t\tSeleccione una opción\n");
@@ -26,10 +26,11 @@ int menu()
         scanf("%i", &num);
 
         if (num == 1){
-            lista_palabras(RANKING);
+            PRANKING nuevo = juego();
+            rankear(&ranking, nuevo);
         }
         else if (num == 2){
-            
+            imprimir_ranking(ranking);    
         }
         else {
             exit(0);
