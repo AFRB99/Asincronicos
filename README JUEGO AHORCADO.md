@@ -3,11 +3,11 @@ Proyecto Ahorcado
 
 Estudiantes: Alez Ramírez Binns B76157 y María Isabel Varela Moreno A76713
 
-Este proyecto consiste en un juego donde el usuario lee las instrucciones, escribirá su nombre y la persona escribe un número en consola para saber cuál opción elegir si iniciar el juego, si ver las máximas puntuaciones o 
-abandonar el juego (salir).
+Este proyecto consiste en un juego de ahorcado ejecutado en la terminal de Linux donde el usuario lee las instrucciones, escribirá su nombre y la persona escribe un número en consola para elegir una opción del menu principal: si iniciar el juego, ver las máximas puntuaciones o abandonar el juego (salir). El juego consiste en adivinar la fruta que propone la computadora basada en una lista pre establecida y tiene varios intentos para adivinarlo. Por cada intento fallido se van perdiendo puntos. Si la persona adivina la palabra consigue la maxima puntuacion. 
 
-Instrucciones para compilar y correr el programa:
+Instrucciones para compilar el programa:
 
-gcc -ahorcado.c -o ahorcado
+g++ main.c -lncurses 
 
-gcc ./ahorcado
+Instrucciones para correr el programa:
+./a.out
