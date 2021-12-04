@@ -5,11 +5,8 @@
 #include<math.h>
 #include<ctype.h>
 // #include <unistd.h>
-#include <curses.h>
+#include <curses.h> 
 
-void lista_palabras();
-void juego();
-void dibujo_ahorcado (int intentos);
 typedef struct ranking 
 {
     int puntos;
@@ -17,26 +14,30 @@ typedef struct ranking
     struct ranking *siguiente;
 }RANKING,*PRANKING;
 
+PRANKING juego();
+void rankear(PRANKING *lista_ranking, PRANKING actual);
+void imprimir_ranking(PRANKING lista_ranking);
+void dibujo_ahorcado (int intentos);
+
+
 char lista [17][15] = {"sandia","melon","papaya","limon","manzana", 
 "pera", "fresa", "mora","arandano", "piña", "uva", "jocote", 
 "mango","guanabana", "carambola", "cas", "banano" 
 };
 
 //Funcion con la lista de palabras que se le mostraran al usuario
-void lista_palabras(PRANKING ranking){
+
+//Funcion con el algoritmo principal del juego
+PRANKING juego(){
 
     printf("\nINGRESE SU NOMBRE:\n");
     char nombre[20];
     scanf("%s",nombre);
     fflush(stdin);
 
-    RANKING actual;
-    strcpy (actual.nombre, nombre);
-
-    juego();
-}
-//Funcion con el algoritmo principal del juego
-void juego(){
+    PRANKING actual = (PRANKING)malloc(sizeof(RANKING));
+    actual->nombre=(char*)malloc(sizeof(char)*15);
+    strcpy (actual->nombre, nombre);
     //Definicion de variables
     char letra;
     int x,y,z,random,largo,espacio;
@@ -60,8 +61,10 @@ void juego(){
     do{
         correcto = 0;
         printf("\n\t\t\t\tJUEGO DEL AHORCADO\n\n");
-        printf(" Intentos Disponibles: %i\t\tPuntuacion: %i\n",6-intentos,puntos);
+        printf(" \nIntentos Disponibles: %i\t\tPuntuacion: %i\n",6-intentos,puntos);
+        fflush(stdout);
         dibujo_ahorcado(intentos);
+        fflush(stdout);
 
         //Imprime el array con los caracteres de escogida
         printf("\n\n\n");
@@ -72,7 +75,8 @@ void juego(){
         //Indicador de derrota
         if (intentos == 6){
             printf("\n\n LO SENTIMOS, PERDISTE!!\n");
-            printf(" LA PALABRA CORRECTA ERA: %s\n\n",lista[random]);
+            printf("\n\n LA PALABRA CORRECTA ERA: %s\n\n",lista[random]);
+            actual->puntos = puntos;
             break;
         }
 
@@ -85,12 +89,14 @@ void juego(){
         }
 
 
+
         if (espacio == 0){
             printf("\n\n FELICIDADES HAS GANADO!!!\n\n");
+            actual->puntos = puntos; 
             break;
         }
     
-        printf("\n\n Digite una letra: ");
+        printf("\n\n Digite una letra: \n");
         scanf(" %c",&letra);
         fflush(stdin);
 
@@ -109,6 +115,49 @@ void juego(){
 
     }while(intentos != 7);
     printf("\n\n");
+    return actual   ;
+}
+
+
+void rankear(PRANKING *lista_ranking, PRANKING actual) {
+
+    if (*lista_ranking == NULL){
+        *lista_ranking = actual;
+        fflush(stdout);
+        return;
+
+    }
+
+    for (PRANKING pivote = *lista_ranking; pivote != NULL; pivote = pivote->siguiente){
+        if (actual->puntos > pivote->puntos){
+            actual->siguiente = pivote; 
+            *lista_ranking = actual; 
+            fflush(stdout);
+        }
+
+        else if (pivote->siguiente == NULL){
+            pivote->siguiente = actual;
+            fflush(stdout);
+            break;
+        }
+    }
+
+}
+
+void imprimir_ranking(PRANKING lista_ranking){
+    int entero = 0;
+    
+    if (lista_ranking == NULL){
+        fflush(stdout);
+    }
+    for (PRANKING pivote = lista_ranking; pivote != NULL; pivote = pivote->siguiente){
+        if (entero == 10)
+            break;
+        printf("\nJugador: %s Puntos: %i\n", pivote->nombre, pivote->puntos);
+        entero++; 
+    }
+
+
 }
 
     //Funcion para imprimir el dibujo en pantalla
